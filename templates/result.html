@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Bill Summary</h2>
+{% for person, data in results.items() %}
+    <h3>Total for {{ person }}: ${{ '{0:.2f}'.format(data['total']) }}</h3>
+    <ul>
+        {% for item in data['items'] %}
+            <li>{{ item['item_name'] }} - Cost: ${{ '{0:.2f}'.format(item['cost']) }}</li>
+        {% endfor %}
+    </ul>
+    <p>Subtotal: ${{ '{0:.2f}'.format(data['subtotal']) }}</p>
+    <p>Tax: ${{ '{0:.2f}'.format(data['tax']) }}</p>
+    <p>Tip: ${{ '{0:.2f}'.format(data['tip']) }}</p>
+    <p><strong>Total: ${{ '{0:.2f}'.format(data['total']) }}</strong></p>
+    <hr>
+{% endfor %}
+<a href="{{ url_for('index') }}">Calculate Another Bill</a>
+{% endblock %}
