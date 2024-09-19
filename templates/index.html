@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+{% block content %}
+<form method="post">
+    <h2>People</h2>
+    <label for="people">Enter the names of people (separated by commas):</label><br>
+    <input type="text" id="people" name="people" required><br><br>
+
+    <h2>Items</h2>
+    <div id="items">
+        <div class="item">
+            <label>Item Name:</label>
+            <input type="text" name="item_name" required>
+            <label>Cost:</label>
+            <input type="number" step="0.01" name="item_cost" required>
+            <label>Shared By (names separated by commas or 'all'):</label>
+            <input type="text" name="item_shared" required>
+            <button type="button" onclick="removeItem(this)">Remove Item</button>
+            <hr>
+        </div>
+    </div>
+    <button type="button" onclick="addItem()">Add Another Item</button><br><br>
+
+    <h2>Tax</h2>
+    <label>
+        <input type="radio" name="tax_input_type" value="percent" checked>
+        Percentage
+    </label>
+    <label>
+        <input type="radio" name="tax_input_type" value="amount">
+        Amount
+    </label><br>
+    <div id="tax-percent">
+        <label>Tax Rate (%):</label>
+        <input type="number" step="0.01" name="tax_rate" min="0">
+    </div>
+    <div id="tax-amount" style="display:none;">
+        <label>Total Tax Amount:</label>
+        <input type="number" step="0.01" name="total_tax" min="0">
+    </div><br>
+
+    <h2>Tip</h2>
+    <label>
+        <input type="radio" name="tip_input_type" value="percent" checked>
+        Percentage
+    </label>
+    <label>
+        <input type="radio" name="tip_input_type" value="amount">
+        Amount
+    </label><br>
+    <div id="tip-percent">
+        <label>Tip Rate (%):</label>
+        <input type="number" step="0.01" name="tip_rate" min="0">
+    </div>
+    <div id="tip-amount" style="display:none;">
+        <label>Total Tip Amount:</label>
+        <input type="number" step="0.01" name="total_tip" min="0">
+    </div><br>
+
+    <input type="submit" value="Calculate">
+</form>
+
+<script>
+    function addItem() {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'item';
+        itemDiv.innerHTML = `
+            <label>Item Name:</label>
+            <input type="text" name="item_name" required>
+            <label>Cost:</label>
+            <input type="number" step="0.01" name="item_cost" required>
+            <label>Shared By (names separated by commas or 'all'):</label>
+            <input type="text" name="item_shared" required>
+            <button type="button" onclick="removeItem(this)">Remove Item</button>
+            <hr>
+        `;
+        document.getElementById('items').appendChild(itemDiv);
+    }
+
+    function removeItem(button) {
+        button.parentElement.remove();
+    }
+
+    // Toggle tax input fields
+    const taxInputs = document.getElementsByName('tax_input_type');
+    taxInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.value === 'percent') {
+                document.getElementById('tax-percent').style.display = 'block';
+                document.getElementById('tax-amount').style.display = 'none';
+            } else {
+                document.getElementById('tax-percent').style.display = 'none';
+                document.getElementById('tax-amount').style.display = 'block';
+            }
+        });
+    });
+
+    // Toggle tip input fields
+    const tipInputs = document.getElementsByName('tip_input_type');
+    tipInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.value === 'percent') {
+                document.getElementById('tip-percent').style.display = 'block';
+                document.getElementById('tip-amount').style.display = 'none';
+            } else {
+                document.getElementById('tip-percent').style.display = 'none';
+                document.getElementById('tip-amount').style.display = 'block';
+            }
+        });
+    });
+</script>
+{% endblock %}
